@@ -12,7 +12,7 @@ def checksum(data: bytes) -> int:
     return reduce(xor, data, 0)
 
 
-def pulse_nrst(ser: serial.Serial, duration_ms: int = 100):
+def pulse_nrst(ser: serial.Serial, duration_ms: int = 50):
     """Hold NRST low for duration_ms, then release.
 
     Assumes RTS -> 100nF AC-coupling cap -> NRST wiring.
@@ -20,13 +20,12 @@ def pulse_nrst(ser: serial.Serial, duration_ms: int = 100):
     ser.rts = False  # NRST asserted (low)
     time.sleep(duration_ms / 1000.0)
     ser.rts = True  # NRST released (high)
-    # small delay to allow MTU to process reset release
-    time.sleep(0.05)
 
 
 def enter_bootloader(ser: serial.Serial):
     """Pulse NRST to exit reset into bootloader, then perform auto-baud sync."""
-    pulse_nrst(ser, duration_ms=100)  # longer hold for reliability
+    pulse_nrst(ser, duration_ms=50)  # longer hold for reliability
+    time.sleep(0.1)  # small delay to allow MCU to process reset release
     # Auto-baud sync
     ser.write(b"\x7f")
     ack = ser.read(1)
@@ -86,8 +85,8 @@ def flash_image(port: str, image_path: str, base_addr: int = 0x08000000):
         port, 115200, parity=serial.PARITY_EVEN, timeout=1
     ) as ser:
         # 1) Pulse NRST cycle to ensure clean BOOT0 detection
-        pulse_nrst(ser, duration_ms=100)
-        time.sleep(500 / 1000)
+        pulse_nrst(ser, duration_ms=50)
+        time.sleep(0.1)
 
         # 2) Enter bootloader via NRST pulse + sync
         enter_bootloader(ser)
@@ -104,7 +103,7 @@ def flash_image(port: str, image_path: str, base_addr: int = 0x08000000):
         go(ser, base_addr)
 
         # 6) Final reset to latch into the running application
-        pulse_nrst(ser, duration_ms=100)
+        pulse_nrst(ser, duration_ms=50)
 
 
 if __name__ == "__main__":
