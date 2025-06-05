@@ -84,18 +84,22 @@ def flash_image(port: str, image_path: str, base_addr: int = 0x08000000):
     with serial.Serial(
         port, 115200, parity=serial.PARITY_EVEN, timeout=1
     ) as ser:
-        # 1) Enter bootloader via NRST pulse + sync
+        # 1) Pulse NRST before start
+        pulse_nrst(ser, duration_ms=50)
+        time.sleep(0.05)
+
+        # 2) Enter bootloader via NRST pulse + sync
         enter_bootloader(ser)
 
-        # 2) Mass erase flash
+        # 3) Mass erase flash
         mass_erase(ser)
 
-        # 3) Program in 256-byte pages
+        # 4) Program in 256-byte pages
         for offset in range(0, len(img), 256):
             chunk = img[offset : offset + 256]
             write_block(ser, base_addr + offset, chunk)
 
-        # 4) Issue 'Go' to start application
+        # 5) Issue 'Go' to start application
         go(ser, base_addr)
 
 
