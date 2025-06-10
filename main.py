@@ -78,30 +78,36 @@ def go(ser: serial.Serial, addr: int):
         raise RuntimeError("Go address not ACKed")
 
 
-def flash_image(port: str, image_path: str, base_addr: int = 0x08000000):
+def flash_image(
+    ser: serial.Serial, image_path: str, base_addr: int = 0x08000000
+):
     """Overall flow: enter bootloader, erase, program, and reset into app."""
     img = open(image_path, "rb").read()
-    with serial.Serial(
-        port, 115200, parity=serial.PARITY_EVEN, timeout=1
-    ) as ser:
-        # 1) Pulse NRST before start
-        pulse_nrst(ser, duration_ms=50)
-        time.sleep(0.05)
 
-        # 2) Enter bootloader via NRST pulse + sync
-        enter_bootloader(ser)
+    # 1) Pulse NRST before start
+    pulse_nrst(ser, duration_ms=50)
+    time.sleep(0.05)
 
-        # 3) Mass erase flash
-        mass_erase(ser)
+    # 2) Enter bootloader via NRST pulse + sync
+    enter_bootloader(ser)
 
-        # 4) Program in 256-byte pages
-        for offset in range(0, len(img), 256):
-            chunk = img[offset : offset + 256]
-            write_block(ser, base_addr + offset, chunk)
+    # 3) Mass erase flash
+    mass_erase(ser)
 
-        # 5) Issue 'Go' to start application
-        go(ser, base_addr)
+    # 4) Program in 256-byte pages
+    for offset in range(0, len(img), 256):
+        chunk = img[offset : offset + 256]
+        write_block(ser, base_addr + offset, chunk)
+
+    # 5) Issue 'Go' to start application
+    go(ser, base_addr)
 
 
 if __name__ == "__main__":
-    flash_image("COM1", "firmware.bin")
+    # Example firmware flash.
+    with serial.Serial(
+        "COM1", 115200, parity=serial.PARITY_EVEN, timeout=1
+    ) as ser:
+        flash_image(ser, "firmware.bin")
+
+    pass
