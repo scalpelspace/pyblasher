@@ -36,7 +36,7 @@ jobs:
 
       - name: Run PyInstaller main.spec
         run: |
-          pyinstaller --clean --noconfirm main.spec
+          pyinstaller --clean --noconfirm main.py
         shell: bash
 
       - name: Upload artifacts
