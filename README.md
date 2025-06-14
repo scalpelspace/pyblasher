@@ -1,11 +1,11 @@
 # pyblasher
 
-![black_formatter](https://github.com/danielljeon/pyblasher/actions/workflows/black_formatter.yaml/badge.svg)
-![pyinstaller](https://github.com/danielljeon/pyblasher/actions/workflows/pyinstaller.yaml/badge.svg)
+![black_formatter](https://github.com/scalpelspace/pyblasher/actions/workflows/black_formatter.yaml/badge.svg)
+![pyinstaller](https://github.com/scalpelspace/pyblasher/actions/workflows/pyinstaller.yaml/badge.svg)
 
 Python based firmware flash and utility tool for
-the [`momentum_pcb`](https://github.com/danielljeon/momentum_pcb)
-running [`momentum`](https://github.com/danielljeon/momentum) firmware.
+the [`momentum_pcb`](https://github.com/scalpelspace/momentum_pcb)
+running [`momentum`](https://github.com/scalpelspace/momentum) firmware.
 
 ---
 
