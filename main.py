@@ -7,8 +7,7 @@ import serial
 
 from flash_firmware import flash_image, pulse_nrst
 from nor_flash_comm import (
-    write_enable,
-    write_disable,
+    reset,
     read_section,
     save_hexdump,
 )
@@ -38,26 +37,15 @@ def __flash_image():
     print("\tFirmware update successful")
 
 
-def __nvm_write_enable():
+def __nvm_reset():
     print(f"1. Opening serial port COM port ({COM_PORT})")
     with serial.Serial(COM_PORT, 115200) as ser:
         time.sleep(1)  # Wait for NRSTs to clear from COM port establishment
 
-        print(f"2. Beginning NVM write enable communication")
-        write_enable(ser)
+        print(f"2. Beginning NVM reset")
+        reset(ser)
 
-    print("\tEnabled NVM write")
-
-
-def __nvm_write_disable():
-    print(f"1. Opening serial port COM port ({COM_PORT})")
-    with serial.Serial(COM_PORT, 115200) as ser:
-        time.sleep(1)  # Wait for NRSTs to clear from COM port establishment
-
-        print(f"2. Beginning NVM write disable communication")
-        write_disable(ser)
-
-    print("\tDisabled NVM write")
+    print("\tReset NVM")
 
 
 def __nvm_memory_extract():
@@ -126,9 +114,8 @@ def main_menu_print():
     print(
         "    Options: (Not case sensitive)\n"
         "     1 = Momentum firmware update\n"
-        "     2 = NVM write enable\n"
-        "     3 = NVM write disable\n"
-        "     4 = NVM sector readout\n"
+        "     2 = NVM reset (wipe memory)\n"
+        "     3 = NVM sector readout\n"
         "     9 = Change COM port\n"
         "     e = Exit\n"
     )
@@ -150,10 +137,8 @@ def main():
                 if choice == "1":
                     __flash_image()
                 elif choice == "2":
-                    __nvm_write_enable()
+                    __nvm_reset()
                 elif choice == "3":
-                    __nvm_write_disable()
-                elif choice == "4":
                     __nvm_memory_extract()
                 elif choice == "9":
                     __com_config()

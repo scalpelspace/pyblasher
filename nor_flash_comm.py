@@ -6,14 +6,13 @@ import time
 import serial
 
 # Flash memory control defined values
-SOF = 0x7E
+FRAME_START = 0x7E
 CMD_ACK = 0x06
 CMD_NACK = 0x07
-CMD_WRITE_EN = 0x10
-CMD_WRITE_DEN = 0x11
-CMD_WRITE = 0x12
-CMD_READ_DATA = 0x20
-CMD_DATA = 0x21
+CMD_DATA = 0x08
+CMD_NVM_READ = 0x10
+CMD_NVM_WRITE = 0x11
+CMD_NVM_RESET = 0x20
 
 
 def __crc16_calc(data: bytes, init: int = 0xFFFF, poly: int = 0x1021) -> int:
@@ -30,15 +29,15 @@ def __crc16_calc(data: bytes, init: int = 0xFFFF, poly: int = 0x1021) -> int:
 
 def __build_frame(cmd: int, payload: bytes = b"") -> bytes:
     length = len(payload)
-    frame = bytearray([SOF, cmd]) + length.to_bytes(2, "big") + payload
+    frame = bytearray([FRAME_START, cmd]) + length.to_bytes(2, "big") + payload
     crc = __crc16_calc(frame)
     frame += crc.to_bytes(2, "big")
     return bytes(frame)
 
 
 def __parse_frame(buf: bytes):
-    if len(buf) < 6 or buf[0] != SOF:
-        raise ValueError("Frame too short or no SOF")
+    if len(buf) < 6 or buf[0] != FRAME_START:
+        raise ValueError("Frame too short or no FRAME_START")
     cmd = buf[1]
     length = int.from_bytes(buf[2:4], "big")
     total_len = 1 + 1 + 2 + length + 2
@@ -79,16 +78,16 @@ def __read_frame(ser, timeout=1.0):
     3) Read [LEN] + CRC(2)
     Returns full frame bytes.
     """
-    # 1) Wait for SOF
+    # 1) Wait for FRAME_START
     deadline = time.time() + timeout
     while True:
         if time.time() > deadline:
-            raise TimeoutError("Timeout waiting for SOF")
+            raise TimeoutError("Timeout waiting for FRAME_START")
         b = ser.read(1)
         if not b:
             time.sleep(0.001)
             continue
-        if b[0] == SOF:
+        if b[0] == FRAME_START:
             break
 
     # 2) Read cmd + length
@@ -99,26 +98,17 @@ def __read_frame(ser, timeout=1.0):
     # 3) Read payload + CRC
     rest = __read_exactly(ser, length + 2, timeout)
 
-    frame = bytes([SOF]) + hdr + rest
+    frame = bytes([FRAME_START]) + hdr + rest
     return frame
 
 
-def write_enable(ser: serial.Serial):
+def reset(ser: serial.Serial):
     """Unlock flash writes for exactly one write operation."""
     ser.reset_input_buffer()
-    ser.write(__build_frame(CMD_WRITE_EN))
+    ser.write(__build_frame(CMD_NVM_RESET))
     cmd, _, _ = __parse_frame(__read_frame(ser))
     if cmd != CMD_ACK:
-        raise RuntimeError("WREN not ACKed")
-
-
-def write_disable(ser: serial.Serial):
-    """Manually lock flash writes (if you ever need to)."""
-    ser.reset_input_buffer()
-    ser.write(__build_frame(CMD_WRITE_DEN))
-    cmd, _, _ = __parse_frame(__read_frame(ser))
-    if cmd != CMD_ACK:
-        raise RuntimeError("WDIS not ACKed")
+        raise RuntimeError("Reset not ACKed")
 
 
 def read_section(
@@ -134,7 +124,7 @@ def read_section(
             2, "big"
         )
         ser.reset_input_buffer()
-        ser.write(__build_frame(CMD_READ_DATA, payload))
+        ser.write(__build_frame(CMD_NVM_READ, payload))
         frame = __read_frame(ser)
         cmd, chunk, _ = __parse_frame(frame)
         if cmd != CMD_DATA:
