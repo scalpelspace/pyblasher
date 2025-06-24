@@ -30,6 +30,7 @@ def __flash_image():
     with serial.Serial(
         SERIAL_PORT, 115200, parity=serial.PARITY_EVEN, timeout=1
     ) as ser:
+        time.sleep(1)  # Wait for NRSTs to clear from serial port establishment
 
         print(f"3. Beginning firmware flash")
 
