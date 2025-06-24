@@ -4,6 +4,7 @@ import sys
 import time
 
 import serial
+from serial.tools import list_ports
 
 from flash_firmware import flash_image, pulse_nrst
 from nor_flash_comm import (
@@ -12,7 +13,11 @@ from nor_flash_comm import (
     save_hexdump,
 )
 
-COM_PORT = "COM1"
+# Silicon Labs CP2102N default USB VID/PID.
+CP2102N_VID = 0x10C4
+CP2102N_PID = 0xEA60
+
+SERIAL_PORT = "COM1"
 
 
 def __flash_image():
@@ -21,9 +26,9 @@ def __flash_image():
     if len(image_path) < 5 or image_path[-4:] != ".bin":
         image_path += ".bin"
 
-    print(f"2. Opening serial port COM port ({COM_PORT})")
+    print(f"2. Opening serial port ({SERIAL_PORT})")
     with serial.Serial(
-        COM_PORT, 115200, parity=serial.PARITY_EVEN, timeout=1
+        SERIAL_PORT, 115200, parity=serial.PARITY_EVEN, timeout=1
     ) as ser:
 
         print(f"3. Beginning firmware flash")
@@ -38,9 +43,9 @@ def __flash_image():
 
 
 def __nvm_reset():
-    print(f"1. Opening serial port COM port ({COM_PORT})")
-    with serial.Serial(COM_PORT, 115200) as ser:
-        time.sleep(1)  # Wait for NRSTs to clear from COM port establishment
+    print(f"1. Opening serial port ({SERIAL_PORT})")
+    with serial.Serial(SERIAL_PORT, 115200) as ser:
+        time.sleep(1)  # Wait for NRSTs to clear from serial port establishment
 
         print(f"2. Beginning NVM reset")
         reset(ser)
@@ -68,13 +73,13 @@ def __nvm_memory_extract():
     if len(output_file_path) < 5 or output_file_path[-4:] != ".txt":
         output_file_path += ".txt"
 
-    print(f"4. Opening serial port COM port ({COM_PORT})")
-    with serial.Serial(COM_PORT, 115200) as ser:
+    print(f"4. Opening serial port ({SERIAL_PORT})")
+    with serial.Serial(SERIAL_PORT, 115200) as ser:
         # Pulse NRST before start
         pulse_nrst(ser, duration_ms=50)
         time.sleep(0.05)
 
-        time.sleep(7)  # Wait for NRSTs to clear from COM port establishment
+        time.sleep(7)  # Wait for NRSTs to clear from serial port establishment
 
         print(f"5. Beginning NVM read communication")
         sector = read_section(
@@ -87,15 +92,62 @@ def __nvm_memory_extract():
     print(f"\tWrote {len(sector)} bytes to {output_file_path}")
 
 
-def __com_config():
-    global COM_PORT
-    print("Enter a COM port:")
-    input_com_port = input("> ").strip().lower()
-    if input_com_port.isnumeric():
-        COM_PORT = f"COM{input_com_port}"
+def __serial_port_manual_config():
+    global SERIAL_PORT
+
+    print(f"Current serial port: {SERIAL_PORT}")
+    print("Enter a serial port:")
+    input_serial_port = input("> ").strip().lower()
+    if input_serial_port.isnumeric():
+        SERIAL_PORT = f"COM{input_serial_port}"
     else:
-        COM_PORT = input_com_port
-    print(f"COM port configured to: {COM_PORT}")
+        SERIAL_PORT = input_serial_port.upper()
+    print(f"\tSerial port configured to: {SERIAL_PORT}")
+
+
+def __find_cp2102n_ports():
+    """Scan serial ports and return those matching the CP2102N VID/PID."""
+    matches = []
+    # Pre-build the hex string once for fallback matching
+    vid_pid = f"{CP2102N_VID:04X}:{CP2102N_PID:04X}".lower()
+
+    for port in list_ports.comports():
+        # Primary check via explicit attributes (pyserial 3.4)
+        if port.vid == CP2102N_VID and port.pid == CP2102N_PID:
+            matches.append(
+                {
+                    "device": port.device,
+                    "description": port.description,
+                    "hwid": port.hwid,
+                }
+            )
+
+        # Fallback: case-insensitive search in the hwid string
+        elif port.hwid and vid_pid in port.hwid.lower():
+            matches.append(
+                {
+                    "device": port.device,
+                    "description": port.description,
+                    "hwid": port.hwid,
+                }
+            )
+
+    return matches
+
+
+def __serial_port_auto_config():
+    global SERIAL_PORT
+
+    cp_ports = __find_cp2102n_ports()
+    if cp_ports:
+        print(
+            f"\tFound CP2102N device(s): "
+            f"{', '.join([port['device'] for port in cp_ports])}"
+        )
+        SERIAL_PORT = cp_ports[0]["device"]
+        print(f"\tSerial port configured to: {SERIAL_PORT}")
+    else:
+        print("\tNo CP2102N devices found, please add a serial port manually")
 
 
 def header_print():
@@ -116,14 +168,17 @@ def main_menu_print():
         "     1 = Momentum firmware update\n"
         "     2 = NVM reset (wipe memory)\n"
         "     3 = NVM sector readout\n"
-        "     9 = Change COM port\n"
+        "     8 = Automatic serial port configuration\n"
+        "     9 = Manual serial port configuration\n"
         "     e = Exit\n"
     )
 
 
 def main():
     header_print()
-    __com_config()
+
+    __serial_port_auto_config()
+
     end_of_command_print()
 
     try:
@@ -140,8 +195,10 @@ def main():
                     __nvm_reset()
                 elif choice == "3":
                     __nvm_memory_extract()
+                elif choice == "8":
+                    __serial_port_auto_config()
                 elif choice == "9":
-                    __com_config()
+                    __serial_port_manual_config()
                 elif choice == "e":
                     raise KeyboardInterrupt
                 else:
