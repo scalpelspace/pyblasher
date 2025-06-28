@@ -1,11 +1,5 @@
 """pyBlasher GUI app."""
 
-# Disable mtdev (multi touch) to resolve executable builds on Linux
-from kivy.config import Config
-
-Config.set("input", "mtdev", "")
-
-# Usual imports
 import time
 
 import serial
