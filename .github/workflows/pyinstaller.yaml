@@ -50,10 +50,10 @@ jobs:
             libgl1-mesa-dev libmtdev-dev libmtdev1
 
       # Kivy SDL2 & GLEW on Windows
-      - name: Install Kivy SDL2 & GLEW (Windows)
+      - name: Install Kivy SDL2, GLEW & ANGLE (Windows)
         if: matrix.os == 'windows-latest'
         run: |
-          pip install kivy_deps.sdl2 kivy_deps.glew
+          pip install kivy_deps.sdl2 kivy_deps.glew kivy_deps.angle
 
       - name: Install dependencies
         run: |
