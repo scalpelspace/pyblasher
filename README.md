@@ -1,7 +1,6 @@
 # pyblasher
 
 ![black_formatter](https://github.com/scalpelspace/pyblasher/actions/workflows/black_formatter.yaml/badge.svg)
-![pyinstaller](https://github.com/scalpelspace/pyblasher/actions/workflows/pyinstaller.yaml/badge.svg)
 
 Python based firmware flash and utility tool for
 the [`momentum_pcb`](https://github.com/scalpelspace/momentum_pcb)
@@ -17,7 +16,9 @@ running [`momentum`](https://github.com/scalpelspace/momentum) firmware.
   * [1 Overview](#1-overview)
   * [2 Flashing Firmware](#2-flashing-firmware)
     * [2.1 UART Bootloader (USB-C)](#21-uart-bootloader-usb-c)
-  * [2.2 SWD (TC2050)](#22-swd-tc2050)
+    * [2.2 SWD (TC2050)](#22-swd-tc2050)
+  * [3 Dev Notes](#3-dev-notes)
+    * [3.1 Deprecated PyInstaller Workflow](#31-deprecated-pyinstaller-workflow)
 <!-- TOC -->
 
 </details>
@@ -82,8 +83,26 @@ There are 2 primary operating modes that affect USB-C firmware flashing:
 11. _**For modified boards:**_ Re-open the `BOOT0 jumper` and push the RESET
     button (short NRST to ground) to begin running the firmware.
 
-## 2.2 SWD (TC2050)
+### 2.2 SWD (TC2050)
 
 1. Using an STM32 SWD flash tool (ie, ST-Link) connect to the TV2050 connector.
 2. Flash/debug firmware with an SWD firmware flash setup (ie,
    STM32CubeProgrammer).
+
+---
+
+## 3 Dev Notes
+
+### 3.1 Deprecated PyInstaller Workflow
+
+The PyInstaller macOS, Windows, Linux builds workflow is saved
+in [docs/pyinstaller.yaml](docs/pyinstaller.yaml) for reference.
+
+- Discontinued use due to fatal error on Windows build related to Kivy and
+  OpenGL versions, see issue #2.
+
+The badge markdown would be as follows:
+
+```
+![pyinstaller](https://github.com/scalpelspace/pyblasher/actions/workflows/pyinstaller.yaml/badge.svg)
+```
