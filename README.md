@@ -12,15 +12,15 @@ running [`momentum`](https://github.com/scalpelspace/momentum) firmware.
   <summary>Table of Contents</summary>
 
 <!-- TOC -->
-
 * [pyblasher](#pyblasher)
-    * [1 Overview](#1-overview)
-    * [2 Flashing Firmware](#2-flashing-firmware)
-        * [2.1 UART Bootloader (USB-C)](#21-uart-bootloader-usb-c)
-        * [2.2 SWD (TC2050)](#22-swd-tc2050)
-    * [3 Dev Notes](#3-dev-notes)
-        * [3.1 Deprecated PyInstaller Workflow](#31-deprecated-pyinstaller-workflow)
-
+  * [1 Overview](#1-overview)
+    * [1.1 PyBlasher Graphical User Interface (GUI)](#11-pyblasher-graphical-user-interface-gui)
+    * [1.2 PyBlasher Command Line Interface (CLI)](#12-pyblasher-command-line-interface-cli)
+  * [2 Flashing Firmware](#2-flashing-firmware)
+    * [2.1 UART Bootloader (USB-C)](#21-uart-bootloader-usb-c)
+    * [2.2 SWD (TC2050)](#22-swd-tc2050)
+  * [3 Dev Notes](#3-dev-notes)
+    * [3.1 Deprecated PyInstaller Workflow](#31-deprecated-pyinstaller-workflow)
 <!-- TOC -->
 
 </details>
@@ -28,6 +28,20 @@ running [`momentum`](https://github.com/scalpelspace/momentum) firmware.
 ---
 
 ## 1 Overview
+
+### 1.1 PyBlasher Graphical User Interface (GUI)
+
+PyBlasher runs in GUI mode by default.
+
+![gui_image.png](docs/pictures/gui_image.png)
+
+### 1.2 PyBlasher Command Line Interface (CLI)
+
+To manually run the CLI run use the `-c` or `--cli` flag.
+
+```shell
+python3 main.py --cli  # py instead of "python3" for Windows.
+```
 
 ---
 
