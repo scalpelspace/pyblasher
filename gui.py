@@ -95,6 +95,7 @@ class FirmwareToolUI(BoxLayout):
         found_ports = find_cp2102n_ports()
         if found_ports:
             self.port_spinner.values = found_ports
+            self.port_spinner.text = found_ports[0]  # Default to first port
         else:
             self.port_spinner.values = []
             self.port_spinner.text = MSG_NO_PORTS_FOUND
