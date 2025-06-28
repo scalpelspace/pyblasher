@@ -4,6 +4,7 @@ import time
 
 import serial
 from kivy.app import App
+from kivy.config import Config
 from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
@@ -16,6 +17,9 @@ from kivy.uix.widget import Widget
 
 from flash_firmware import flash_image
 from util import find_cp2102n_ports
+
+# Disable mtdev (multi touch) to resolve executable builds on Linux
+Config.set("input", "mtdev", "")
 
 MSG_NO_PORTS_FOUND = "No ports found"
 
