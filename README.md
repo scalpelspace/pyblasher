@@ -12,13 +12,15 @@ running [`momentum`](https://github.com/scalpelspace/momentum) firmware.
   <summary>Table of Contents</summary>
 
 <!-- TOC -->
+
 * [pyblasher](#pyblasher)
-  * [1 Overview](#1-overview)
-  * [2 Flashing Firmware](#2-flashing-firmware)
-    * [2.1 UART Bootloader (USB-C)](#21-uart-bootloader-usb-c)
-    * [2.2 SWD (TC2050)](#22-swd-tc2050)
-  * [3 Dev Notes](#3-dev-notes)
-    * [3.1 Deprecated PyInstaller Workflow](#31-deprecated-pyinstaller-workflow)
+    * [1 Overview](#1-overview)
+    * [2 Flashing Firmware](#2-flashing-firmware)
+        * [2.1 UART Bootloader (USB-C)](#21-uart-bootloader-usb-c)
+        * [2.2 SWD (TC2050)](#22-swd-tc2050)
+    * [3 Dev Notes](#3-dev-notes)
+        * [3.1 Deprecated PyInstaller Workflow](#31-deprecated-pyinstaller-workflow)
+
 <!-- TOC -->
 
 </details>
@@ -99,7 +101,8 @@ The PyInstaller macOS, Windows, Linux builds workflow is saved
 in [docs/pyinstaller.yaml](docs/pyinstaller.yaml) for reference.
 
 - Discontinued use due to fatal error on Windows build related to Kivy and
-  OpenGL versions, see issue #2.
+  OpenGL versions, see
+  issue [#2](https://github.com/scalpelspace/pyblasher/issues/2).
 
 The badge markdown would be as follows:
 
