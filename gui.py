@@ -1,14 +1,5 @@
 """pyBlasher GUI app."""
 
-import os
-
-from kivy.config import Config
-
-# If building via GitHub Actions, force the mock window (no real GL)
-if os.environ.get("GITHUB_ACTIONS") == "true":
-    Config.set("kivy", "window", "mock")
-    Config.set("input", "mtdev", "")
-
 import time
 
 import serial
