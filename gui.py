@@ -22,6 +22,14 @@ from util import find_cp2102n_ports
 MSG_NO_PORTS_FOUND = "No ports found"
 
 
+def dim_btn(btn):
+    btn.disabled = True
+
+
+def undim_btn(btn):
+    btn.disabled = False
+
+
 class FirmwareToolUI(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(
@@ -71,17 +79,18 @@ class FirmwareToolUI(BoxLayout):
         # Spacer
         self.add_widget(Widget(size_hint_y=None, height=10))
 
-        # Execute & Log
-        self.add_widget(
-            Button(
-                text="Flash Firmware",
-                size_hint=(1, None),
-                height=40,
-                background_normal="",
-                background_color=(0.8, 0.3, 0.3, 1),
-                on_press=lambda _: self.execute_flash(),
-            )
+        # Execute flash
+        self.flash_btn = Button(
+            text="Flash Firmware",
+            size_hint=(1, None),
+            height=40,
+            background_normal="",
+            background_color=(0.8, 0.3, 0.3, 1),
+            on_press=lambda _: self.execute_flash(),
         )
+        self.add_widget(self.flash_btn)
+
+        # Log
         self.log_view = TextInput(
             readonly=True, multiline=True, size_hint=(1, 1)
         )
@@ -133,6 +142,8 @@ class FirmwareToolUI(BoxLayout):
 
     def _start_flash_thread(self, port):
         """Spawn a daemon thread for flashing so the UI thread is free."""
+        dim_btn(self.flash_btn)
+
         Thread(
             target=self.__confirm_flash_proceed, args=(port,), daemon=True
         ).start()
@@ -166,6 +177,8 @@ class FirmwareToolUI(BoxLayout):
             Clock.schedule_once(lambda dt: self.log(f"Error during flash: {e}"))
         finally:
             ser.close()
+
+            Clock.schedule_once(lambda dt: undim_btn(self.flash_btn))
 
     def execute_flash(self):
         port = self.port_spinner.text
