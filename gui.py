@@ -1,9 +1,11 @@
 """pyBlasher GUI app."""
 
 import time
+from threading import Thread
 
 import serial
 from kivy.app import App
+from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
@@ -129,21 +131,39 @@ class FirmwareToolUI(BoxLayout):
         else:
             self.log(f"Ignored dropped file (not .bin): {path}")
 
-    def _confirm_flash_proceed(self, port):
+    def _start_flash_thread(self, port):
+        """Spawn a daemon thread for flashing so the UI thread is free."""
+        Thread(
+            target=self.__confirm_flash_proceed, args=(port,), daemon=True
+        ).start()
+
+    def __confirm_flash_proceed(self, port):
+        """Runs in a worker thread to flash firmware."""
         try:
             ser = serial.Serial(
                 port, 115200, parity=serial.PARITY_EVEN, timeout=1
             )
         except Exception as e:
-            self.log(f"Could not open port {port}: {e}")
+            Clock.schedule_once(
+                lambda dt: self.log(f"Could not open port {port}: {e}")
+            )
             return
+
         time.sleep(1)
-        self.log(f"Starting firmware update on {port} with {self.bin_path}")
+
+        Clock.schedule_once(
+            lambda dt: self.log(
+                f"Starting firmware update on {port} with {self.bin_path}"
+            )
+        )
+
         try:
             flash_image(ser, self.bin_path)
-            self.log("Firmware update successful.")
+            Clock.schedule_once(
+                lambda dt: self.log("Firmware update successful.")
+            )
         except Exception as e:
-            self.log(f"Error during flash: {e}")
+            Clock.schedule_once(lambda dt: self.log(f"Error during flash: {e}"))
         finally:
             ser.close()
 
@@ -185,7 +205,7 @@ class FirmwareToolUI(BoxLayout):
         yes_btn.bind(
             on_press=lambda _: (
                 popup.dismiss(),
-                self._confirm_flash_proceed(port),
+                self._start_flash_thread(port),
             )
         )
         cancel_btn.bind(on_press=popup.dismiss)
