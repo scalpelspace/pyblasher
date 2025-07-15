@@ -229,6 +229,7 @@ class FirmwareToolUI(BoxLayout):
 class PyBlasherApp(App):
     def build(self):
         Window.size = (600, 450)
+        Window.clearcolor = (0.12, 0.12, 0.12, 1)  # Dark gray background
         Window.minimum_width = 350
         Window.minimum_height = 350
         Window.set_icon("assets/icon.png")
