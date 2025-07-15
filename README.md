@@ -19,6 +19,7 @@ running [`momentum`](https://github.com/scalpelspace/momentum) firmware.
   * [2 Flashing Firmware](#2-flashing-firmware)
     * [2.1 UART Bootloader (USB-C)](#21-uart-bootloader-usb-c)
     * [2.2 SWD (TC2050)](#22-swd-tc2050)
+    * [2.3 Manual Port Finding](#23-manual-port-finding)
   * [3 Dev Notes](#3-dev-notes)
     * [3.1 Deprecated PyInstaller Workflow](#31-deprecated-pyinstaller-workflow)
 <!-- TOC -->
@@ -71,39 +72,53 @@ There are 2 primary operating modes that affect USB-C firmware flashing:
    Labs's [VCP CP210x USB to UART Bridge VCP Drivers](https://www.silabs.com/developer-tools/usb-to-uart-bridge-vcp-drivers).
 2. _**For modified boards:**_ Short the `BOOT0 jumper` to raise BOOT0.
 3. Connect your desktop computer to the Momentum USB-C.
-4. Find the serial port for your Momentum board.
-    - If you’re unsure which one is correct you can try unplugging, refreshing
-      and replugging in the USB-C to see which new port is opened.
-        - **Windows:** Open Device Manager and under `Ports (COM & LPT)` find
-          the
-          `COMx` port named something along the lines of
-          `Silicon Labs CP210x USB to UART Bridge (COMx)`.
-        - **macOS:** Open a terminal and enter the following command:
-            ```shell
-            ls /dev/tty.* /dev/cu.*
-            ```
-            - The expected name is similar to `/dev/tty.usbserial-*`.
-        - **Linux:** Open a terminal and enter the following command:
-            ```shell
-            dmesg | grep tty
-            ````
-            - The expected name is `/dev/ttyUSB*`.
-5. Find the file path of the new Momentum firmware (`.bin`) you’d like to flash.
-6. Run pyBlasher and enter the serial port name for your momentum board from
-   earlier steps.
-7. Run the Firmware Update option.
-8. Enter the new firmware filepath.
-9. Firmware flashing will begin, the `UART RX` and `UART TX` leds should flash
-   throughout the process.
-10. Upon completion of flashing, the Momentum firmware will be auto reset.
-11. _**For modified boards:**_ Re-open the `BOOT0 jumper` and push the RESET
-    button (short NRST to ground) to begin running the firmware.
+4. Run pyBlasher.
+5. pyBlasher should find the connected port automatically at the top.
+    1. `COMxx` for Windows.
+    2. `/dev/tty.usbserial-*` for macOS.
+    3. `/dev/ttyUSB*` for Linux.
+
+    - **If not found**, reconnect the Momentum USB-C and click the
+      `Refresh ports` button.
+    - If there is more than 1 board connected, you can click the top button
+      and cycle through the port options.
+6. Drag and drop the firmware `.bin` file or browse manually.
+7. Click the `Flash firmware` button.
+    - Firmware flashing will begin, the `UART RX` and `UART TX` leds should
+      flash throughout the process.
+8. Upon completion of flashing, the Momentum dev board will auto reset.
+9. _**For modified boards:**_ Re-open the `BOOT0 jumper` and push the RESET
+   button (short NRST to ground) to begin running the firmware.
 
 ### 2.2 SWD (TC2050)
 
 1. Using an STM32 SWD flash tool (ie, ST-Link) connect to the TV2050 connector.
 2. Flash/debug firmware with an SWD firmware flash setup (ie,
    STM32CubeProgrammer).
+
+### 2.3 Manual Port Finding
+
+**Windows:**
+
+1. Open Device Manager.
+2. Under `Ports (COM & LPT)` find the `COMx` port named something along the
+   lines of `Silicon Labs CP210x USB to UART Bridge (COMx)`.
+
+**macOS:** Open a terminal and enter the following command:
+
+```shell
+ls /dev/tty.* /dev/cu.*
+```
+
+- The expected name is similar to `/dev/tty.usbserial-*`.
+
+**Linux:** Open a terminal and enter the following command:
+
+```shell
+dmesg | grep tty
+````
+
+- The expected name is `/dev/ttyUSB*`.
 
 ---
 
