@@ -156,7 +156,7 @@ class FirmwareToolUI(BoxLayout):
             )
         except Exception as e:
             Clock.schedule_once(
-                lambda dt: self.log(f"Could not open port {port}: {e}")
+                lambda dt, err=e: self.log(f"Could not open port {port}: {err}")
             )
             return
 
@@ -174,7 +174,9 @@ class FirmwareToolUI(BoxLayout):
                 lambda dt: self.log("Firmware update successful.")
             )
         except Exception as e:
-            Clock.schedule_once(lambda dt: self.log(f"Error during flash: {e}"))
+            Clock.schedule_once(
+                lambda dt, err=e: self.log(f"Error during flash: {err}")
+            )
         finally:
             ser.close()
 
