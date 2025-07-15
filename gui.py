@@ -7,6 +7,7 @@ import serial
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.core.window import Window
+from kivy.metrics import sp
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.filechooser import FileChooserListView
@@ -38,8 +39,8 @@ class FirmwareToolUI(BoxLayout):
         # Port selection
         self.port_spinner = Spinner(
             text="Click to select a port",
-            size_hint=(1, None),
-            height=40,
+            size_hint=(1, 0.25),
+            font_size=sp(16),
             background_normal="",
             background_color=(0.1, 0.4, 0.1, 1),
         )
@@ -47,8 +48,8 @@ class FirmwareToolUI(BoxLayout):
         self.add_widget(
             Button(
                 text="Refresh ports",
-                size_hint=(1, None),
-                height=40,
+                size_hint=(1, 0.25),
+                font_size=sp(16),
                 background_normal="",
                 background_color=(0.1, 0.4, 0.1, 1),
                 on_press=lambda _: self.refresh_ports(),
@@ -56,18 +57,20 @@ class FirmwareToolUI(BoxLayout):
         )
 
         # Spacer
-        self.add_widget(Widget(size_hint_y=None, height=10))
+        self.add_widget(Widget(size_hint=(1, 0.05)))
 
         # Firmware file selection
         self.bin_label = Label(
-            text="No .bin selected", size_hint=(1, None), height=30
+            text="No .bin selected",
+            size_hint=(1, 0.25),
+            font_size=sp(16),
         )
         self.add_widget(self.bin_label)
         self.add_widget(
             Button(
                 text="Drop a .bin file here or click to browse",
-                size_hint=(1, None),
-                height=40,
+                size_hint=(1, 0.25),
+                font_size=sp(16),
                 background_normal="",
                 background_color=(0.8, 0.5, 0.1, 1),
                 on_press=self.browse_bin,
@@ -77,13 +80,13 @@ class FirmwareToolUI(BoxLayout):
         Window.bind(on_drop_file=self._on_file_drop)
 
         # Spacer
-        self.add_widget(Widget(size_hint_y=None, height=10))
+        self.add_widget(Widget(size_hint=(1, 0.05)))
 
         # Execute flash
         self.flash_btn = Button(
-            text="Flash Firmware",
-            size_hint=(1, None),
-            height=40,
+            text="Flash firmware",
+            size_hint=(1, 0.25),
+            font_size=sp(16),
             background_normal="",
             background_color=(0.8, 0.3, 0.3, 1),
             on_press=lambda _: self.execute_flash(),
@@ -120,7 +123,7 @@ class FirmwareToolUI(BoxLayout):
     def browse_bin(self, _):
         chooser = FileChooserListView(filters=["*.bin"])
         popup = Popup(
-            title="Select .bin file", content=chooser, size_hint=(0.9, 0.9)
+            title="Select .bin file", content=chooser, size_hint=(0.8, 0.8)
         )
         chooser.bind(selection=lambda fs, sel: self._select_bin(sel, popup))
         popup.open()
@@ -203,7 +206,7 @@ class FirmwareToolUI(BoxLayout):
             )
         )
 
-        button_row = BoxLayout(size_hint=(1, None), height=40, spacing=10)
+        button_row = BoxLayout(size_hint=(1, 0.25))
         yes_btn = Button(text="Yes", background_color=(0.1, 0.6, 0.1, 1))
         cancel_btn = Button(text="Cancel", background_color=(0.6, 0.1, 0.1, 1))
         button_row.add_widget(yes_btn)
@@ -212,7 +215,7 @@ class FirmwareToolUI(BoxLayout):
         confirm_layout.add_widget(button_row)
 
         popup = Popup(
-            title="Confirm Firmware Flash",
+            title="Confirm firmware flash",
             content=confirm_layout,
             size_hint=(0.8, 0.6),
         )
