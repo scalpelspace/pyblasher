@@ -1,7 +1,7 @@
 """PyBlasher constants."""
 
 # PyBlasher version.
-VERSION = "1.12.0"
+VERSION = "0.1.0"
 
 # CLI version assumed width.
 CLI_WIDTH = 80
