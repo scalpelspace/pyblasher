@@ -54,9 +54,7 @@ def __parse_frame(buf: bytes):
 
 
 def __read_exactly(ser, count, timeout=1.0):
-    """
-    Read exactly `count` bytes from ser, or raise TimeoutError.
-    """
+    """Read exactly `count` bytes from ser, or raise TimeoutError."""
     buf = bytearray()
     deadline = time.time() + timeout
     while len(buf) < count:
@@ -114,9 +112,7 @@ def reset(ser: serial.Serial):
 def read_section(
     ser: serial.Serial, start_addr: int, length: int, chunk_size: int = 256
 ) -> bytes:
-    """
-    Dump an arbitrary flash range by repeatedly issuing CMD_READ.
-    """
+    """Dump an arbitrary flash range by repeatedly issuing CMD_READ."""
     data = bytearray()
     for offset in range(0, length, chunk_size):
         sz = min(chunk_size, length - offset)
