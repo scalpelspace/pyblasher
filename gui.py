@@ -18,7 +18,7 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.widget import Widget
 
 from flash_firmware import flash_image
-from util import find_cp2102n_ports
+from util import resource_path, find_cp2102n_ports
 
 MSG_NO_PORTS_FOUND = "No ports found"
 
@@ -237,7 +237,7 @@ class PyBlasherApp(App):
         Window.clearcolor = (0.12, 0.12, 0.12, 1)  # Dark gray background
         Window.minimum_width = 350
         Window.minimum_height = 350
-        Window.set_icon("assets/icon.png")
+        Window.set_icon(resource_path("assets/icon.png"))
         return FirmwareToolUI()
 
 

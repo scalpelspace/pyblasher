@@ -1,8 +1,23 @@
 """pyBlasher utility helper functions."""
 
+import os.path
+import sys
+
 from serial.tools import list_ports
 
 from constants import *
+
+
+def resource_path(relative_path: str):
+    """Get absolute path using a relative path to a resource.
+
+    Based on: https://stackoverflow.com/questions/31836104/pyinstaller-and-onefile-how-to-include-an-image-in-the-exe-file.
+    """
+    try:
+        base_path = sys._MEIPASS2
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 
 def find_cp2102n_ports():
