@@ -17,6 +17,7 @@ from kivy.uix.spinner import Spinner
 from kivy.uix.textinput import TextInput
 from kivy.uix.widget import Widget
 
+from constants import VERSION
 from flash_firmware import flash_image
 from util import resource_path, find_cp2102n_ports
 
@@ -100,6 +101,7 @@ class FirmwareToolUI(BoxLayout):
         self.add_widget(self.log_view)
 
         # Post init actions
+        self.log(f"Running PyBlasher v{VERSION}")
         self.refresh_ports()
 
     def log(self, message: str):

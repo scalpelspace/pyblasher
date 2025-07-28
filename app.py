@@ -5,6 +5,7 @@ from sys import exit
 
 import serial
 
+from constants import VERSION, CLI_WIDTH
 from flash_firmware import flash_image
 from util import find_cp2102n_ports
 
@@ -63,11 +64,9 @@ def __serial_port_auto_config():
 
 
 def header_print():
-    print(
-        "-------------------------------------------------------------------------------\n"
-        "                               PyBlasher (v0.1.0)                              \n"
-        "-------------------------------------------------------------------------------\n"
-    )
+    print(f"{'-'*CLI_WIDTH}")
+    print(f"{f'PyBlasher (v{VERSION})':^{CLI_WIDTH}}")
+    print(f"{'-'*CLI_WIDTH}")
 
 
 def end_of_command_print():
