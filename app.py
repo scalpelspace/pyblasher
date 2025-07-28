@@ -5,12 +5,7 @@ from sys import exit
 
 import serial
 
-from flash_firmware import flash_image, pulse_nrst
-from nor_flash_comm import (
-    reset,
-    read_section,
-    save_hexdump,
-)
+from flash_firmware import flash_image
 from util import find_cp2102n_ports
 
 SERIAL_PORT = "COM1"
@@ -37,56 +32,6 @@ def __flash_image():
                 raise RuntimeError("Ensure BOOT0 is raised, then retry")
 
     print("\tFirmware update successful")
-
-
-def __nvm_reset():
-    print(f"1. Opening serial port ({SERIAL_PORT})")
-    with serial.Serial(SERIAL_PORT, 115200) as ser:
-        time.sleep(1)  # Wait for NRSTs to clear from serial port establishment
-
-        print(f"2. Beginning NVM reset")
-        reset(ser)
-
-    print("\tReset NVM")
-
-
-def __nvm_memory_extract():
-    print(f"1. Enter a starting address (Hex):")
-    section_start = input("> ").strip()
-    try:
-        section_start = int(section_start, 16)
-    except TypeError:
-        raise ValueError("Expected hexadecimal address")
-
-    print(f"2. Enter a read length (recommended 4096):")
-    section_length = input("> ").strip()
-    try:
-        section_length = int(section_length)
-    except TypeError:
-        raise ValueError("Expected hexadecimal address")
-
-    print(f"3. Enter a output filepath (recommended .txt):")
-    output_file_path = input("> ")
-    if len(output_file_path) < 5 or output_file_path[-4:] != ".txt":
-        output_file_path += ".txt"
-
-    print(f"4. Opening serial port ({SERIAL_PORT})")
-    with serial.Serial(SERIAL_PORT, 115200) as ser:
-        # Pulse NRST before start
-        pulse_nrst(ser, duration_ms=50)
-        time.sleep(0.05)
-
-        time.sleep(7)  # Wait for NRSTs to clear from serial port establishment
-
-        print(f"5. Beginning NVM read communication")
-        sector = read_section(
-            ser, start_addr=section_start, length=section_length
-        )
-
-    print(f"6. Beginning hex dump file save")
-    save_hexdump(sector, start_addr=section_start, filename=output_file_path)
-
-    print(f"\tWrote {len(sector)} bytes to {output_file_path}")
 
 
 def __serial_port_manual_config():
@@ -133,10 +78,8 @@ def main_menu_print():
     print(
         "    Options: (Not case sensitive)\n"
         "     1 = Momentum firmware update\n"
-        "     2 = NVM reset (wipe memory)\n"
-        "     3 = NVM sector readout\n"
-        "     8 = Automatic serial port configuration\n"
-        "     9 = Manual serial port configuration\n"
+        "     2 = Automatic serial port configuration\n"
+        "     3 = Manual serial port configuration\n"
         "     e = Exit\n"
     )
 
@@ -159,12 +102,8 @@ def run_cli():
                 if choice == "1":
                     __flash_image()
                 elif choice == "2":
-                    __nvm_reset()
-                elif choice == "3":
-                    __nvm_memory_extract()
-                elif choice == "8":
                     __serial_port_auto_config()
-                elif choice == "9":
+                elif choice == "3":
                     __serial_port_manual_config()
                 elif choice == "e":
                     raise KeyboardInterrupt
