@@ -1,4 +1,4 @@
-"""pyBlasher CLI app."""
+"""PyBlasher CLI app."""
 
 import time
 from sys import exit
@@ -65,7 +65,7 @@ def __serial_port_auto_config():
 def header_print():
     print(
         "-------------------------------------------------------------------------------\n"
-        "                       Momentum pyBlasher (v0.1.0-alpha)                       \n"
+        "                               PyBlasher (v0.1.0)                              \n"
         "-------------------------------------------------------------------------------\n"
     )
 

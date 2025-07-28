@@ -1,4 +1,4 @@
-"""pyBlasher utility helper functions."""
+"""PyBlasher utility helper functions."""
 
 import os.path
 import sys

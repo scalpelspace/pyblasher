@@ -75,8 +75,8 @@ There are 2 primary operating modes that affect USB-C firmware flashing:
    Labs's [VCP CP210x USB to UART Bridge VCP Drivers](https://www.silabs.com/developer-tools/usb-to-uart-bridge-vcp-drivers).
 2. _**For modified boards:**_ Short the `BOOT0 jumper` to raise BOOT0.
 3. Connect your desktop computer to the Momentum USB-C.
-4. Run pyBlasher.
-5. pyBlasher should find the connected port automatically at the top.
+4. Run PyBlasher.
+5. PyBlasher should find the connected port automatically at the top.
     1. `COMxx` for Windows.
     2. `/dev/tty.usbserial-*` for macOS.
     3. `/dev/ttyUSB*` for Linux.
@@ -151,7 +151,7 @@ The badge markdown would be as follows:
 #### 3.2.1 PyInstaller single file executable
 
 ```shell
-pyinstaller --name pyBlasher --onefile --windowed --icon=assets/icon.ico main.py
+pyinstaller --name PyBlasher --onefile --windowed --icon=assets/icon.ico main.py
 ```
 
 #### 3.2.2 Inno Setup

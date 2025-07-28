@@ -1,4 +1,4 @@
-"""pyBlasher GUI app."""
+"""PyBlasher GUI app."""
 
 import time
 from threading import Thread

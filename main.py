@@ -1,4 +1,4 @@
-"""Main pyBlasher application for Momentum."""
+"""Main PyBlasher application for Momentum."""
 
 import sys
 
