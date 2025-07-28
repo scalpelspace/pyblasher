@@ -109,9 +109,9 @@ def __serial_port_auto_config():
     if cp_ports:
         print(
             f"\tFound CP2102N device(s): "
-            f"{', '.join([port['device'] for port in cp_ports])}"
+            f"{', '.join([port for port in cp_ports])}"
         )
-        SERIAL_PORT = cp_ports[0]["device"]
+        SERIAL_PORT = cp_ports[0]
         print(f"\tSerial port configured to: {SERIAL_PORT}")
     else:
         print("\tNo CP2102N devices found, please add a serial port manually")
