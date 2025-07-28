@@ -22,6 +22,9 @@ running [`momentum`](https://github.com/scalpelspace/momentum) firmware.
     * [2.3 Manual Port Finding](#23-manual-port-finding)
   * [3 Dev Notes](#3-dev-notes)
     * [3.1 Deprecated PyInstaller Workflow](#31-deprecated-pyinstaller-workflow)
+    * [3.2 PyInstaller Build](#32-pyinstaller-build)
+      * [3.2.1 PyInstaller single file executable](#321-pyinstaller-single-file-executable)
+      * [3.2.2 Inno Setup](#322-inno-setup)
 <!-- TOC -->
 
 </details>
@@ -138,3 +141,19 @@ The badge markdown would be as follows:
 ```
 ![pyinstaller](https://github.com/scalpelspace/pyblasher/actions/workflows/pyinstaller.yaml/badge.svg)
 ```
+
+### 3.2 PyInstaller Build
+
+> Based on YouTube:
+> [Convert GUI App to Real Program - Python to exe to setup wizard](https://youtu.be/p3tSLatmGvU)
+> by [PythonSimplified](https://www.youtube.com/@PythonSimplified).
+
+#### 3.2.1 PyInstaller single file executable
+
+```shell
+pyinstaller --name pyBlasher --onefile --windowed --icon=assets/icon.ico main.py
+```
+
+#### 3.2.2 Inno Setup
+
+Setup file compiled via: [Inno Setup](https://jrsoftware.org/isdl.php).
