@@ -151,8 +151,10 @@ The badge markdown would be as follows:
 #### 3.2.1 PyInstaller single file executable
 
 ```shell
-pyinstaller --name PyBlasher --onefile --windowed --icon=assets/icon.ico main.py
+pyinstaller --name PyBlasher --onefile --windowed --icon=assets/icon.ico --hidden-import=win32timezone main.py
 ```
+
+> Hidden imports ensures explicit inclusion of required dependencies.
 
 #### 3.2.2 Inno Setup
 
