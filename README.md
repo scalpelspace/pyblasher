@@ -2,9 +2,7 @@
 
 ![black_formatter](https://github.com/scalpelspace/pyblasher/actions/workflows/black_formatter.yaml/badge.svg)
 
-Python based firmware flash and utility tool for
-the [`momentum_pcb`](https://github.com/scalpelspace/momentum_pcb)
-running [`momentum`](https://github.com/scalpelspace/momentum) firmware.
+Python based basic firmware flash and utility tool.
 
 ---
 
