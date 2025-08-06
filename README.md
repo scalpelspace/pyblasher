@@ -75,14 +75,14 @@ There are 2 primary operating modes that affect USB-C firmware flashing:
 1. If not done so already, download the Silicon
    Labs's [VCP CP210x USB to UART Bridge VCP Drivers](https://www.silabs.com/developer-tools/usb-to-uart-bridge-vcp-drivers).
 2. _**For modified boards:**_ Short the `BOOT0 jumper` to raise BOOT0.
-3. Connect your desktop computer to the Momentum USB-C.
+3. Connect your desktop computer to the dev board's USB-C.
 4. Run PyBlasher.
 5. PyBlasher should find the connected port automatically at the top.
     1. `COMxx` for Windows.
     2. `/dev/tty.usbserial-*` for macOS.
     3. `/dev/ttyUSB*` for Linux.
 
-    - **If not found**, reconnect the Momentum USB-C and click the
+    - **If not found**, reconnect to the dev board's USB-C and click the
       `Refresh ports` button.
     - If there is more than 1 board connected, you can click the top button
       and cycle through the port options.
@@ -90,7 +90,7 @@ There are 2 primary operating modes that affect USB-C firmware flashing:
 7. Click the `Flash firmware` button.
     - Firmware flashing will begin, the `UART RX` and `UART TX` leds should
       flash throughout the process.
-8. Upon completion of flashing, the Momentum dev board will auto reset.
+8. Upon completion of flashing, the dev board will auto reset.
 9. _**For modified boards:**_ Re-open the `BOOT0 jumper` and push the RESET
    button (short NRST to ground) to begin running the firmware.
 
