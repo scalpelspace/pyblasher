@@ -76,7 +76,7 @@ def end_of_command_print():
 def main_menu_print():
     print(
         "    Options: (Not case sensitive)\n"
-        "     1 = Momentum firmware update\n"
+        "     1 = Firmware update\n"
         "     2 = Automatic serial port configuration\n"
         "     3 = Manual serial port configuration\n"
         "     e = Exit\n"
