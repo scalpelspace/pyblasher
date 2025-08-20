@@ -96,7 +96,9 @@ There are 2 primary operating modes that affect USB-C firmware flashing:
 
 ### 2.2 SWD (TC2050)
 
-1. Using an STM32 SWD flash tool (ie, ST-Link) connect to the TV2050 connector.
+1. Using an STM32 SWD flash tool (ie, ST-Link) connect to the TC2050 connector.
+    - Note: the TC2050 interface does not power the Momentum dev board, still
+      requires external power source.
 2. Flash/debug firmware with an SWD firmware flash setup (ie,
    STM32CubeProgrammer).
 
