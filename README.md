@@ -23,9 +23,6 @@ Python based basic firmware flash and utility tool.
     * [3.2 PyInstaller Build](#32-pyinstaller-build)
       * [3.2.1 PyInstaller single file executable](#321-pyinstaller-single-file-executable)
       * [3.2.2 Inno Setup](#322-inno-setup)
-  * [4 Release Notes](#4-release-notes)
-    * [4.1 v0.1.0](#41-v010)
-    * [4.2 v0.1.1](#42-v011)
 <!-- TOC -->
 
 </details>
@@ -162,18 +159,3 @@ pyinstaller --name PyBlasher --onefile --windowed --icon=assets/icon.ico --hidde
 #### 3.2.2 Inno Setup
 
 Setup file compiled via: [Inno Setup](https://jrsoftware.org/isdl.php).
-
----
-
-## 4 Release Notes
-
-### 4.1 v0.1.0
-
-- Pre-release beta test release.
-
-### 4.2 v0.1.1
-
-- Pre-release beta test release.
-- **Patch:**
-    - Fix "click here to browse" (.bin file) option causing module dependency
-      error ([issue #3](https://github.com/scalpelspace/pyblasher/issues/3)).
