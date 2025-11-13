@@ -15,8 +15,6 @@ Python based basic firmware flash and utility tool.
     * [1.1 PyBlasher Graphical User Interface (GUI)](#11-pyblasher-graphical-user-interface-gui)
     * [1.2 PyBlasher Command Line Interface (CLI)](#12-pyblasher-command-line-interface-cli)
   * [2 Flashing Firmware](#2-flashing-firmware)
-    * [2.1 UART Bootloader (USB-C)](#21-uart-bootloader-usb-c)
-    * [2.2 SWD (TC2050)](#22-swd-tc2050)
     * [2.3 Manual Port Finding](#23-manual-port-finding)
   * [3 Dev Notes](#3-dev-notes)
     * [3.1 Deprecated PyInstaller Workflow](#31-deprecated-pyinstaller-workflow)
@@ -49,21 +47,13 @@ python3 main.py --cli  # py instead of "python3" for Windows.
 
 ## 2 Flashing Firmware
 
-3 methods of firmware flashing:
-
-1. UART Bootloader via USB-C (Handsfree programming).
-2. UART Bootloader via USB-C (Manual BOOT0 control).
-3. SWD via TC2050.
-
-### 2.1 UART Bootloader (USB-C)
-
-There are 2 primary operating modes that affect USB-C firmware flashing:
+There are 2 primary operating modes that affect USB-to-UART bootloader flashing:
 
 1. **Default:** Handsfree programming.
 2. **Modified:** Manual BOOT0 control.
-    - `BOOT0 DTR bridge` cut/open for custom serial access.
-    - For users using the second modified option will have additional steps,
-      format shown below:
+    - `BOOT0` is disconnected either buy a hardware slide switch or jumper.
+    - Users using the modified mode will have additional steps, format of the
+      additional steps shown below:
       > 1. _**For modified boards:**_ Example step only required for Manual
            BOOT0 control.
 
@@ -71,7 +61,7 @@ There are 2 primary operating modes that affect USB-C firmware flashing:
 
 1. If not done so already, download the Silicon
    Labs's [VCP CP210x USB to UART Bridge VCP Drivers](https://www.silabs.com/developer-tools/usb-to-uart-bridge-vcp-drivers).
-2. _**For modified boards:**_ Short the `BOOT0 jumper` to raise BOOT0.
+2. _**For modified boards:**_ Manually short or close the `BOOT0` jumper.
 3. Connect your desktop computer to the dev board's USB-C.
 4. Run PyBlasher.
 5. PyBlasher should find the connected port automatically at the top.
@@ -88,16 +78,8 @@ There are 2 primary operating modes that affect USB-C firmware flashing:
     - Firmware flashing will begin, the `UART RX` and `UART TX` leds should
       flash throughout the process.
 8. Upon completion of flashing, the dev board will auto reset.
-9. _**For modified boards:**_ Re-open the `BOOT0 jumper` and push the RESET
-   button (short NRST to ground) to begin running the firmware.
-
-### 2.2 SWD (TC2050)
-
-1. Using an STM32 SWD flash tool (ie, ST-Link) connect to the TC2050 connector.
-    - Note: the TC2050 interface does not power the Momentum dev board, still
-      requires external power source.
-2. Flash/debug firmware with an SWD firmware flash setup (ie,
-   STM32CubeProgrammer).
+9. _**For modified boards:**_ Re-open the `BOOT0` jumper and reset the STM32 MCU
+   (short NRST to ground) to begin running the firmware.
 
 ### 2.3 Manual Port Finding
 

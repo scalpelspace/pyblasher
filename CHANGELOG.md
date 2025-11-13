@@ -9,6 +9,7 @@
 * [Changelog](#changelog)
   * [v0.1.0 (2025-07-28)](#v010--2025-07-28-)
   * [v0.1.1 (2025-08-04)](#v011--2025-08-04-)
+  * [v0.1.2 (WIP)](#v012--wip-)
 <!-- TOC -->
 
 </details>
@@ -27,3 +28,11 @@
 - **Patch:**
     - Fix "click here to browse" (.bin file) option causing module dependency
       error ([issue #3](https://github.com/scalpelspace/pyblasher/issues/3)).
+
+---
+
+## [v0.1.2 (WIP)]()
+
+- Pre-release beta test release.
+- **Modifications:**
+    - Update and cleanup docs structure. 
