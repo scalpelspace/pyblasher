@@ -9,7 +9,7 @@
 * [Changelog](#changelog)
   * [v0.1.0 (2025-07-28)](#v010--2025-07-28-)
   * [v0.1.1 (2025-08-04)](#v011--2025-08-04-)
-  * [v0.1.2 (WIP)](#v012--wip-)
+  * [v0.2.0 (WIP)](#v020--wip-)
 <!-- TOC -->
 
 </details>
@@ -31,8 +31,11 @@
 
 ---
 
-## [v0.1.2 (WIP)]()
+## [v0.2.0 (WIP)](https://github.com/scalpelspace/pyblasher/releases/tag/v0.2.0)
 
 - Pre-release beta test release.
+- **Additions:**
+    - Add new UART Terminal page for developer/debug usage.
+        - Uses swaping Kivy screen separate from the firmware flash screen.
 - **Modifications:**
     - Update and cleanup docs structure. 
