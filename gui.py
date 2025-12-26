@@ -428,14 +428,17 @@ class TerminalUI(BoxLayout):
         if not self._ser:
             self._append("Not connected.")
             return
-        raw = self.tx_input.text.strip()
+        raw = self.tx_input.text
         if not raw:
             return
         try:
             if self.hex_mode.text == "HEX":
                 payload = parse_hex(raw)
             else:
-                payload = raw.encode("utf-8")
+                # Interpret escape cases (ie, \r, \n, \t, \xNN, etc).
+                payload = (
+                    raw.encode("utf-8").decode("unicode_escape").encode("utf-8")
+                )
             write_serial_bytes(self._ser, payload)
             Clock.schedule_once(lambda *_: self._append(f"TX: {raw}"))
         except Exception as e:
