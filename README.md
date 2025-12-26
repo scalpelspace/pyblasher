@@ -132,8 +132,16 @@ The badge markdown would be as follows:
 
 #### 3.2.1 PyInstaller single file executable
 
+Windows:
+
 ```shell
 pyinstaller --name PyBlasher --onefile --windowed --icon=assets/icon.ico --hidden-import=win32timezone main.py
+```
+
+macOS:
+
+```shell
+pyinstaller --name PyBlasher --onedir --windowed --icon assets/icon.icns main.py
 ```
 
 > Hidden imports ensures explicit inclusion of required dependencies.
