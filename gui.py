@@ -306,6 +306,8 @@ class TerminalUI(BoxLayout):
             size_hint=(0.55, 1),
             font_size=sp(16),
         )
+        # Bind enter key.
+        self.tx_input.bind(on_text_validate=lambda *_: self.send_line())
         send_row.add_widget(self.tx_input)
 
         self.eol_mode = Spinner(
@@ -438,6 +440,9 @@ class TerminalUI(BoxLayout):
                 break
 
     def send_line(self):
+        def _restore_input_focus():
+            self.tx_input.focus = True
+
         if not self._ser:
             self._append("Not connected.")
             return
@@ -460,7 +465,9 @@ class TerminalUI(BoxLayout):
                 # "None" -> do nothing.
                 payload = cooked.encode("utf-8")
             write_serial_bytes(self._ser, payload)
-            Clock.schedule_once(lambda *_: self._append(f"TX: {raw}"))
+            # Restore focus.
+            Clock.schedule_once(lambda *_: _restore_input_focus())
+            self._append(f"TX: {raw}")
         except Exception as e:
             self._append(f"TX error: {e}")
 
