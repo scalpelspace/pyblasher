@@ -303,10 +303,18 @@ class TerminalUI(BoxLayout):
         self.tx_input = TextInput(
             hint_text="Type ASCII (or HEX if enabled) ...",
             multiline=False,
-            size_hint=(0.7, 1),
+            size_hint=(0.55, 1),
             font_size=sp(16),
         )
         send_row.add_widget(self.tx_input)
+
+        self.eol_mode = Spinner(
+            text="CRLF",
+            values=["None", "LF", "CRLF"],
+            size_hint=(0.15, 1),
+            font_size=sp(16),
+        )
+        send_row.add_widget(self.eol_mode)
 
         self.hex_mode = Spinner(
             text="ASCII",
@@ -315,6 +323,11 @@ class TerminalUI(BoxLayout):
             font_size=sp(16),
         )
         send_row.add_widget(self.hex_mode)
+
+        def _update_eol_enabled(*_):
+            self.eol_mode.disabled = self.hex_mode.text == "HEX"
+        self.hex_mode.bind(text=_update_eol_enabled)
+        _update_eol_enabled()
 
         send_row.add_widget(
             Button(
@@ -435,11 +448,16 @@ class TerminalUI(BoxLayout):
             if self.hex_mode.text == "HEX":
                 payload = parse_hex(raw)
             else:
-                # Interpret escape sequences (\r, \n, \t, \xNN, etc).
                 cooked = raw.encode("utf-8").decode("unicode_escape")
-                # Auto-append CRLF if user didn't already include a newline.
-                if not cooked.endswith("\n"):
-                    cooked += "\r\n"
+                # Append newline based on dropdown (ASCII mode only).
+                eol = self.eol_mode.text
+                if eol == "LF":
+                    if not cooked.endswith("\n"):
+                        cooked += "\n"
+                elif eol == "CRLF":
+                    if not cooked.endswith("\n"):
+                        cooked += "\r\n"
+                # "None" -> do nothing.
                 payload = cooked.encode("utf-8")
             write_serial_bytes(self._ser, payload)
             Clock.schedule_once(lambda *_: self._append(f"TX: {raw}"))
