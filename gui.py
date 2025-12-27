@@ -328,6 +328,7 @@ class TerminalUI(BoxLayout):
 
         def _update_eol_enabled(*_):
             self.eol_mode.disabled = self.hex_mode.text == "HEX"
+
         self.hex_mode.bind(text=_update_eol_enabled)
         _update_eol_enabled()
 
