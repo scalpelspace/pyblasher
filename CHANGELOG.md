@@ -31,7 +31,7 @@
 
 ---
 
-## [v0.2.0 (WIP)](https://github.com/scalpelspace/pyblasher/releases/tag/v0.2.0)
+## [v0.2.2 (WIP)](https://github.com/scalpelspace/pyblasher/releases/tag/v0.2.2)
 
 - Pre-release beta test release.
 - **Additions:**
