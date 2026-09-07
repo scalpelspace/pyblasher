@@ -4,6 +4,10 @@
 
 Python based basic firmware flash and utility tool.
 
+> **_OBSOLETE NOTE:_** This project is no longer maintained. Please consider
+> using the new web-based [blasher](https://github.com/scalpelspace/blasher)
+> instead. (Archived on 2026-09-06).
+
 ---
 
 <details markdown="1">
